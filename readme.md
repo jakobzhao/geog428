@@ -1,7 +1,6 @@
 # **GEOG495/428: Geospatial Artificial Intelligence**
 
 - **Instructor:** Bo Zhao, zhaobo@uw.edu, Office Hours: by Appt or via Zoom: https://t.ly/kpj_t 
-- **TA:** Liz Peng, lp36@uw.edu, Office Hours: Fridays 2:00-4:00PM on Zoom: https://washington.zoom.us/my/lizhip or by Appt
 - **Meeting Time:** Asynchronous Online
 
 <img src="res/geoai.png" align="right" width="40%" target="_blank" />  This course offers a critical and hands-on introduction to the emerging field of Geospatial Artificial Intelligence (GeoAI), emphasizing not only the integration of machine learning, deep learning, and large language models (LLMs) in spatial analysis, but also their application to urgent social issues—such as housing inequality, homelessness, income disparities, and algorithmic bias. Through real-world datasets involving phenomena like neighborhood coffee shop distribution, community infrastructure, and geotagged public services, students will explore how GeoAI can both reveal and reshape our understanding of spatial justice and inequality.
