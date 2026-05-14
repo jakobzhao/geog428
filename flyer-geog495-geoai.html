@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GEOG 495 GeoAI 地理空间人工智能</title>
+  <style>
+    @page {
+      size: letter;
+      margin: 0;
+    }
+
+    :root {
+      --cyan: #58dcff;
+      --accent: #bfefff;
+      --ink: #f4fdff;
+      --muted: #bdd7df;
+      --panel: rgba(1, 11, 20, 0.72);
+      --line: rgba(88, 220, 255, 0.34);
+      --ui-font: "Avenir Next", "PingFang SC", "Hiragino Sans GB", "STHeiti", "Microsoft YaHei", ui-sans-serif, system-ui, sans-serif;
+      --mono-tech: "DIN Condensed", "Avenir Next Condensed", "SF Pro Display", "Avenir Next", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: #050b12;
+      color: var(--ink);
+      font-family: var(--ui-font);
+      font-synthesis: none;
+    }
+
+    body {
+      display: grid;
+      place-items: start center;
+    }
+
+    .flyer {
+      position: relative;
+      width: 8.5in;
+      height: 11in;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(2, 8, 15, 0.94) 0%, rgba(2, 8, 15, 0.66) 23%, rgba(2, 8, 15, 0.02) 49%, rgba(2, 8, 15, 0.1) 69%, rgba(2, 8, 15, 0.72) 100%),
+        radial-gradient(circle at 50% 47%, rgba(88, 220, 255, 0.08), transparent 33%),
+        url("res/geoai-flyer-bg-v2.png") center / cover no-repeat;
+      box-shadow: 0 28px 90px rgba(0, 0, 0, 0.42);
+    }
+
+    .flyer::before {
+      content: "";
+      position: absolute;
+      inset: 0.18in;
+      border: 1px solid rgba(88, 220, 255, 0.26);
+      box-shadow: inset 0 0 44px rgba(88, 220, 255, 0.08);
+      pointer-events: none;
+    }
+
+    .flyer::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(2, 8, 15, 0.56), transparent 18%, transparent 79%, rgba(2, 8, 15, 0.36)),
+        linear-gradient(180deg, transparent 0%, transparent 56%, rgba(2, 8, 15, 0.26) 74%, rgba(2, 8, 15, 0.58) 100%);
+      pointer-events: none;
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      padding: 0.34in 0.42in 0.42in;
+    }
+
+    .topline {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: start;
+      gap: 0.2in;
+    }
+
+    .school {
+      color: #dcf7ff;
+      font-size: 17px;
+      font-weight: 760;
+      letter-spacing: 0;
+      text-shadow: 0 0 14px rgba(88, 220, 255, 0.28);
+    }
+
+    .school b {
+      color: #fff;
+      font-family: "Hiragino Sans GB", "PingFang SC", "STHeiti", sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .code {
+      text-align: right;
+      color: var(--accent);
+      font-family: var(--mono-tech);
+      font-size: 31px;
+      font-weight: 900;
+      line-height: 1.02;
+      text-shadow: 0 0 14px rgba(88, 220, 255, 0.28);
+    }
+
+    .code span {
+      display: block;
+      margin-top: 0.06in;
+      color: #d9eef5;
+      font-family: var(--ui-font);
+      font-size: 12.8px;
+      font-weight: 720;
+      text-shadow: none;
+    }
+
+    header {
+      margin-top: 0.28in;
+      max-width: 7.1in;
+    }
+
+    h1 {
+      margin: 0;
+      color: #fff;
+      letter-spacing: 0;
+      text-shadow:
+        0 0 10px rgba(88, 220, 255, 0.72),
+        0 0 36px rgba(88, 220, 255, 0.38);
+    }
+
+    .title-latin {
+      display: block;
+      font-family: var(--mono-tech);
+      font-size: 80px;
+      font-weight: 900;
+      line-height: 0.78;
+    }
+
+    .title-zh {
+      display: block;
+      margin-top: 0.08in;
+      font-family: "Hiragino Sans GB", "PingFang SC", "STHeiti", "Microsoft YaHei", sans-serif;
+      font-size: 61px;
+      font-weight: 800;
+      line-height: 1.03;
+    }
+
+    .summary {
+      margin-top: 0.18in;
+      max-width: 6.7in;
+      color: #d9f6ff;
+      font-size: 20px;
+      font-weight: 760;
+      line-height: 1.33;
+      text-shadow: 0 0 18px rgba(0, 0, 0, 0.62);
+    }
+
+    .summary strong {
+      color: var(--accent);
+      font-weight: 900;
+    }
+
+    .meta {
+      margin-top: 0.1in;
+      color: #e8fbff;
+      font-size: 14.4px;
+      font-weight: 680;
+      line-height: 1.28;
+      text-shadow: 0 0 16px rgba(0, 0, 0, 0.72);
+    }
+
+    .meta strong {
+      color: var(--accent);
+      font-weight: 900;
+    }
+
+    .midline {
+      position: absolute;
+      left: 0.55in;
+      right: 0.55in;
+      top: 3.72in;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 0.22in;
+      min-height: 0.58in;
+      padding: 0.09in 0.16in;
+      border-top: 1px solid rgba(88, 220, 255, 0.34);
+      border-bottom: 1px solid rgba(88, 220, 255, 0.22);
+      background: linear-gradient(90deg, rgba(2, 12, 22, 0.8), rgba(2, 12, 22, 0.28), rgba(2, 12, 22, 0.7));
+      backdrop-filter: blur(6px);
+    }
+
+    .midline b {
+      display: block;
+      color: #fff;
+      font-family: "Hiragino Sans GB", "PingFang SC", "STHeiti", sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      line-height: 1.26;
+      text-shadow: 0 0 16px rgba(0, 0, 0, 0.65);
+    }
+
+    .midline span {
+      color: var(--accent);
+      font-family: var(--mono-tech);
+      font-size: 17px;
+      font-weight: 900;
+      white-space: nowrap;
+      text-shadow: 0 0 12px rgba(88, 220, 255, 0.26);
+    }
+
+    .bottom {
+      position: absolute;
+      left: 0.52in;
+      right: 0.52in;
+      bottom: 0.47in;
+      display: grid;
+      grid-template-columns: 1.13fr 0.87fr;
+      gap: 0.19in;
+      align-items: stretch;
+    }
+
+    .panel {
+      min-height: 1.94in;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.28), inset 0 0 28px rgba(88, 220, 255, 0.07);
+      backdrop-filter: blur(10px);
+    }
+
+    .focus {
+      padding: 0.18in 0.19in;
+    }
+
+    .enroll {
+      padding: 0.18in 0.19in;
+      border-color: rgba(88, 220, 255, 0.34);
+    }
+
+    h2 {
+      margin: 0 0 0.13in;
+      color: #fff;
+      font-family: "Hiragino Sans GB", "PingFang SC", "STHeiti", sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .enroll h2 {
+      color: var(--accent);
+    }
+
+    .tracks {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.08in 0.11in;
+      margin-bottom: 0.14in;
+    }
+
+    .track {
+      display: grid;
+      grid-template-columns: 0.08in 1fr;
+      gap: 0.07in;
+      align-items: center;
+      color: #e9fbff;
+      font-size: 13px;
+      font-weight: 720;
+      line-height: 1.18;
+    }
+
+    .track::before {
+      content: "";
+      width: 0.08in;
+      height: 0.08in;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 10px rgba(88, 220, 255, 0.8);
+    }
+
+    .track:nth-child(2)::before {
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(88, 220, 255, 0.72);
+    }
+
+    .track:nth-child(3)::before {
+      background: var(--cyan);
+      box-shadow: 0 0 10px rgba(88, 220, 255, 0.72);
+    }
+
+    .track:nth-child(4)::before {
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(88, 220, 255, 0.7);
+    }
+
+    .critical {
+      margin: 0;
+      padding-top: 0.13in;
+      border-top: 1px solid rgba(88, 220, 255, 0.18);
+      color: #d9f2f8;
+      font-size: 13.8px;
+      font-weight: 520;
+      line-height: 1.47;
+    }
+
+    .critical b {
+      color: var(--accent);
+      font-weight: 900;
+    }
+
+    .tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.06in;
+      margin-top: 0.1in;
+    }
+
+    .tool {
+      padding: 0.04in 0.08in;
+      border: 1px solid rgba(88, 220, 255, 0.25);
+      background: rgba(88, 220, 255, 0.08);
+      color: #e8fbff;
+      font-size: 12.5px;
+      font-weight: 760;
+    }
+
+    .enroll p {
+      margin: 0.08in 0 0;
+      color: #dbeff6;
+      font-size: 14px;
+      line-height: 1.38;
+    }
+
+    .enroll p:first-of-type {
+      margin-top: 0;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 760;
+      line-height: 1.25;
+    }
+
+    .enroll strong,
+    .enroll a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 860;
+    }
+
+    @media print {
+      html,
+      body {
+        width: 8.5in;
+        height: 11in;
+        background: #fff;
+      }
+
+      body {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+
+      .flyer {
+        box-shadow: none;
+      }
+    }
+
+    @media screen and (max-width: 700px) {
+      body {
+        place-items: start stretch;
+      }
+
+      .flyer {
+        width: 100%;
+        height: auto;
+        min-height: 100vh;
+        aspect-ratio: 8.5 / 11;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="flyer" aria-label="GEOG 495 GeoAI 地理空间人工智能课程宣传单">
+    <div class="content">
+      <div class="topline">
+        <div class="school"><b>西雅图华盛顿大学</b><br>就在这个夏天，不要错过</div>
+        <div class="code">GEOG 495<span>2026 夏季 A 学期 · 5 学分</span></div>
+      </div>
+
+      <header>
+        <h1><span class="title-latin">GeoAI</span><span class="title-zh">地理空间人工智能</span></h1>
+        <p class="summary">用 AI 预测空间现象，也<strong>批判 AI 如何塑造空间知识</strong>。</p>
+        <div class="meta">Prof. Bo Zhao 亲授 · UW Geography / HGIS Lab · 线上异步课程 · <strong>Vibe Coding</strong> + GeoAI 实践</div>
+      </header>
+
+      <section class="midline">
+        <b>房价预测 · 城市热效应 · 街景识别 · 遥感地物识别</b>
+        <span>应用 + 批判 + 优化</span>
+      </section>
+
+      <section class="bottom">
+        <div class="panel focus">
+          <h2>课程模块</h2>
+          <div class="tracks">
+            <div class="track">空间预测与真实数据</div>
+            <div class="track">遥感、街景与视觉识别</div>
+            <div class="track">LLMs 与 GIS 工作流</div>
+            <div class="track">Vibe Coding 研究原型</div>
+          </div>
+          <p class="critical"><b>批判视角：</b>从 housing inequality、algorithmic bias 到模型坍塌，理解 GeoAI 的技术能力、政治后果与社会意涵。</p>
+        </div>
+
+        <div class="panel enroll">
+          <h2>报名方式</h2>
+          <p>在 MyPlan 搜索 <strong>GEOG 495</strong></p>
+          <p>课程材料：<br><a href="https://github.com/jakobzhao/geog428">github.com/jakobzhao/geog428</a></p>
+          <p>联系：<a href="mailto:zhaobo@uw.edu">zhaobo@uw.edu</a></p>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
